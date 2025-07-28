@@ -617,7 +617,7 @@ export default function Home() {
           </div>
 
           <div className="border-t border-[#8e8c94] mt-8 pt-8 text-center text-[#c7c3c4]">
-            <p>&copy; 2024 Energui. Tous droits réservés.</p>
+            <p>&copy; {new Date().getFullYear()} Energui. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
