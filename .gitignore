@@ -40,3 +40,4 @@ Thumbs.db
 
 # Optional: ignore next image optimization cache
 public/images/cache/
+out

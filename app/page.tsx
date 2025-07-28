@@ -2,10 +2,28 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const heroImages = [
+    '/assets/accueil.jpeg',
+    '/assets/accueil2.jpeg',
+    '/assets/accueil3.jpeg'
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -18,7 +36,7 @@ export default function Home() {
                 Energui
               </div>
             </div>
-            
+
             <nav className="hidden md:flex space-x-8">
               <a href="#home" className="text-[#303031] hover:text-[#bf3435] cursor-pointer">Accueil</a>
               <a href="#about" className="text-[#303031] hover:text-[#bf3435] cursor-pointer">À propos</a>
@@ -52,10 +70,11 @@ export default function Home() {
 
       {/* Hero Section */}
       <section id="home" className="relative bg-gradient-to-br from-[#bf3435] to-[#303031] min-h-screen flex items-center" style={{
-        backgroundImage: "url('https://readdy.ai/api/search-image?query=Modern%20gas%20station%20with%20sleek%20design%2C%20professional%20petroleum%20facility%20with%20clean%20architecture%2C%20industrial%20energy%20infrastructure%20with%20red%20and%20black%20color%20scheme%2C%20sophisticated%20fuel%20dispensers%20and%20modern%20canopy%20structure%2C%20professional%20lighting%20at%20dusk%2C%20high-quality%20commercial%20photography%20style%2C%20minimalist%20composition%20with%20clear%20sky%20background&width=1920&height=1080&seq=hero1&orientation=landscape')",
+        backgroundImage: `url('${heroImages[currentImageIndex]}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundBlendMode: 'overlay'
+        backgroundBlendMode: 'overlay',
+        transition: 'background-image 1s ease-in-out'
       }}>
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -75,6 +94,18 @@ export default function Home() {
               </a>
             </div>
           </div>
+
+        </div>
+        {/* Image indicators */}
+        <div className="absolute z-10 bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              className={`w-3 h-3 rounded-full transition-colors ${index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                }`}
+              onClick={() => setCurrentImageIndex(index)}
+            />
+          ))}
         </div>
       </section>
 
@@ -85,13 +116,13 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-[#303031] mb-4">À propos de nous</h2>
             <div className="w-24 h-1 bg-[#bf3435] mx-auto mb-8"></div>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-lg text-[#8e8c94] mb-8">
                 Energui est leader dans la distribution des produits pétroliers. À consommer la fiabilité, qualité, des services et à répondre aux écoutes énergie.
               </p>
-              
+
               <div className="space-y-8">
                 <div>
                   <h3 className="text-2xl font-bold text-[#303031] mb-4">Notre Vision</h3>
@@ -99,7 +130,7 @@ export default function Home() {
                     Devenir la référence en matière de distribution énergétique en Guinée et en Afrique de l'Ouest, en offrant des solutions innovantes et durables.
                   </p>
                 </div>
-                
+
                 <div>
                   <h3 className="text-2xl font-bold text-[#303031] mb-4">Notre Mission</h3>
                   <p className="text-[#8e8c94]">
@@ -108,12 +139,15 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
+
             <div className="relative">
-              <img 
-                src="https://readdy.ai/api/search-image?query=Professional%20petroleum%20industry%20facility%20with%20modern%20equipment%2C%20clean%20industrial%20environment%20with%20red%20and%20black%20branding%2C%20sophisticated%20fuel%20storage%20tanks%20and%20distribution%20systems%2C%20professional%20workers%20in%20safety%20gear%2C%20high-quality%20commercial%20photography%2C%20minimalist%20composition%20with%20clear%20lighting%20and%20industrial%20architecture%20background&width=600&height=400&seq=about1&orientation=landscape"
+              <Image
+                src="/assets/apropos.jpeg"
                 alt="À propos d'Energui"
+                width={600}
+                height={400}
                 className="rounded-lg shadow-lg object-cover w-full h-96"
+                priority={false}
               />
             </div>
           </div>
@@ -130,7 +164,7 @@ export default function Home() {
               Chez Energui, nous offrons une gamme complète de produits et services énergétiques adaptés à vos besoins spécifiques.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
@@ -183,7 +217,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-white mb-4">Offres Spéciales</h2>
             <div className="w-24 h-1 bg-white mx-auto mb-8"></div>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-white p-8 rounded-lg">
               <div className="flex items-center mb-6">
@@ -214,7 +248,7 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-            
+
             <div className="bg-white p-8 rounded-lg">
               <div className="flex items-center mb-6">
                 <div className="w-16 h-16 flex items-center justify-center bg-[#bf3435] text-white rounded-full mr-4">
@@ -243,7 +277,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-[#303031] mb-4">Pourquoi nous choisir</h2>
             <div className="w-24 h-1 bg-[#bf3435] mx-auto mb-8"></div>
           </div>
-          
+
           <div className="grid md:grid-cols-4 gap-8">
             {[
               {
@@ -289,7 +323,7 @@ export default function Home() {
               Retrouvez ici nos dernières nouvelles et mises à jour sur l'industrie de l'énergie et les activités de notre entreprise.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
@@ -328,7 +362,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-[#303031] mb-4">Témoignages</h2>
             <div className="w-24 h-1 bg-[#bf3435] mx-auto mb-8"></div>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
@@ -379,7 +413,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-[#303031] mb-4">Nos Partenaires</h2>
             <div className="w-24 h-1 bg-[#bf3435] mx-auto mb-8"></div>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               "Total Energies",
@@ -402,7 +436,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-[#303031] mb-4">Questions Fréquemment Posées</h2>
             <div className="w-24 h-1 bg-[#bf3435] mx-auto mb-8"></div>
           </div>
-          
+
           <div className="space-y-6">
             {[
               {
@@ -438,7 +472,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-[#303031] mb-4">Contactez-nous</h2>
             <div className="w-24 h-1 bg-[#bf3435] mx-auto mb-8"></div>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-12">
             <div>
               <h3 className="text-2xl font-bold text-[#303031] mb-6">Nos Coordonnées</h3>
@@ -452,7 +486,7 @@ export default function Home() {
                     <p className="text-[#8e8c94]">Zone industrielle de Conakry, Guinée</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <div className="w-10 h-10 flex items-center justify-center bg-[#bf3435] text-white rounded-full mr-4 mt-1">
                     <i className="ri-mail-line"></i>
@@ -462,7 +496,7 @@ export default function Home() {
                     <p className="text-[#8e8c94]">contact@energui.com</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <div className="w-10 h-10 flex items-center justify-center bg-[#bf3435] text-white rounded-full mr-4 mt-1">
                     <i className="ri-phone-line"></i>
@@ -474,28 +508,28 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-2xl font-bold text-[#303031] mb-6">Prendre rendez-vous</h3>
               <form className="space-y-4">
                 <div>
-                  <input 
-                    type="text" 
-                    placeholder="Nom complet" 
+                  <input
+                    type="text"
+                    placeholder="Nom complet"
                     className="w-full px-4 py-3 border border-[#c7c3c4] rounded-lg focus:outline-none focus:border-[#bf3435] text-sm"
                   />
                 </div>
                 <div>
-                  <input 
-                    type="email" 
-                    placeholder="Email" 
+                  <input
+                    type="email"
+                    placeholder="Email"
                     className="w-full px-4 py-3 border border-[#c7c3c4] rounded-lg focus:outline-none focus:border-[#bf3435] text-sm"
                   />
                 </div>
                 <div>
-                  <input 
-                    type="tel" 
-                    placeholder="Téléphone" 
+                  <input
+                    type="tel"
+                    placeholder="Téléphone"
                     className="w-full px-4 py-3 border border-[#c7c3c4] rounded-lg focus:outline-none focus:border-[#bf3435] text-sm"
                   />
                 </div>
@@ -509,14 +543,14 @@ export default function Home() {
                   </select>
                 </div>
                 <div>
-                  <textarea 
-                    placeholder="Message" 
+                  <textarea
+                    placeholder="Message"
                     rows={4}
                     className="w-full px-4 py-3 border border-[#c7c3c4] rounded-lg focus:outline-none focus:border-[#bf3435] text-sm"
                   ></textarea>
                 </div>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="w-full bg-[#bf3435] text-white py-3 rounded-lg font-semibold hover:bg-[#a02d2e] transition-colors cursor-pointer whitespace-nowrap"
                 >
                   Envoyer la demande
@@ -539,7 +573,7 @@ export default function Home() {
                 L'énergie en mouvement - Votre partenaire de confiance pour tous vos besoins énergétiques.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-bold mb-4">Services</h4>
               <ul className="space-y-2 text-[#c7c3c4]">
@@ -549,7 +583,7 @@ export default function Home() {
                 <li><a href="#" className="hover:text-white cursor-pointer">Livraison</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-bold mb-4">Liens Utiles</h4>
               <ul className="space-y-2 text-[#c7c3c4]">
@@ -559,7 +593,7 @@ export default function Home() {
                 <li><a href="#contact" className="hover:text-white cursor-pointer">Contact</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-bold mb-4">Restons en contact</h4>
               <p className="text-[#c7c3c4] mb-4">
@@ -581,7 +615,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          
+
           <div className="border-t border-[#8e8c94] mt-8 pt-8 text-center text-[#c7c3c4]">
             <p>&copy; 2024 Energui. Tous droits réservés.</p>
           </div>
